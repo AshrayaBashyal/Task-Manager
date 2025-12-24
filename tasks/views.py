@@ -1,6 +1,11 @@
-from rest_framework import generics
+from django.core.serializers import serialize
+from django.utils.autoreload import raise_last_exception
+from rest_framework import generics, status
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+
 from .models import Task
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, RegisterSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -15,6 +20,7 @@ class TaskListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):    #Force ownership on creation
         serializer.save(user=self.request.user)
 
+
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     # queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -22,6 +28,21 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):    #Only return tasks of logged-in user
         return Task.objects.filter(user=self.request.user)
+
+
+class RegisterView(GenericAPIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_last_exception=True)
+        user = serializer.save()
+
+        return Response(
+            {"message": "User registered successfully"},
+            status=status.HTTP_201_CREATED
+        )
 
 
 
