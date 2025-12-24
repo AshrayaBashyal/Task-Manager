@@ -36,7 +36,7 @@ class RegisterView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
 
-        serializer.is_valid(raise_last_exception=True)
+        serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
         return Response(
