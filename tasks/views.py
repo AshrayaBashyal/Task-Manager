@@ -9,18 +9,19 @@ class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get_queryset(self):    #Only return tasks of logged-in user
         return Task.objects.filter(user=self.request.user).order_by('-created_at')
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer):    #Force ownership on creation
         serializer.save(user=self.request.user)
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     # queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Task.objects.filter(user=self.request.user).order_by('-created_at')
+    def get_queryset(self):    #Only return tasks of logged-in user
+        return Task.objects.filter(user=self.request.user)
 
 
 
