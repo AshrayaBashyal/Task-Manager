@@ -5,7 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 from .models import Task
-from .serializers import TaskSerializer, RegisterSerializer
+from .serializers import TaskSerializer, RegisterSerializer, LoginSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -45,7 +45,20 @@ class RegisterView(GenericAPIView):
         )
 
 
+class LoginView(GenericAPIView):
+    serializer_class = LoginSerializer
 
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+
+        return Response({
+            "message": "Login successful",
+            "user_id": user.id,
+            "username": user.username
+        })
 
 # With Manual API Views
 
