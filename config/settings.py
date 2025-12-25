@@ -41,8 +41,6 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'tasks',
-    'django.contrib.auth.backends.ModelBackend',
-    'tasks.backends.EmailBackend'
 ]
 
 MIDDLEWARE = [
@@ -103,6 +101,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'tasks.auth_backends.EmailBackend',
+]
+
 
 
 # Internationalization
