@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # 'tasks',
     'tasks.apps.TasksConfig'
+    "rest_framework_simplejwt.token_blacklist"
 ]
 
 MIDDLEWARE = [
@@ -109,6 +110,12 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = "tasks.User"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
+}
 
 
 

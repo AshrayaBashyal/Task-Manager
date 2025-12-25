@@ -3,9 +3,10 @@ from django.utils.autoreload import raise_last_exception
 from rest_framework import generics, status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Task
-from .serializers import TaskSerializer, RegisterSerializer, LoginSerializer, ProfileSerializer
+from .serializers import TaskSerializer, RegisterSerializer, LoginSerializer, ProfileSerializer, LogoutSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -54,8 +55,12 @@ class LoginView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
 
+        refresh = RefreshToken.for_user(user)
+
         return Response({
             "message": "Login successful",
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
             "user_id": user.id,
             "username": user.username
         })
@@ -68,6 +73,18 @@ class MyProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+class LogoutView(GenericAPIView):
+    serializer_class = LogoutSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({"message": "Logged out"})
 
 
 
