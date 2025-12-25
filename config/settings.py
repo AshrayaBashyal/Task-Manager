@@ -38,8 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     'rest_framework',
-    'tasks'
+    'tasks',
+    'django.contrib.auth.backends.ModelBackend',
+    'tasks.backends.EmailBackend'
 ]
 
 MIDDLEWARE = [
