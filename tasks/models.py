@@ -1,7 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
+
 
 # Create your models here.
+
+class CustomUser(AbstractUser):
+    email = models.EmailField(max_length=255, unique=True)
+    bio = models.TextField(max_length=500, blank=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+
+    def __str__(self):
+        return self.email
 
 class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
