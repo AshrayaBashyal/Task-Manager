@@ -14,6 +14,20 @@ class User(AbstractUser):
         return self.email
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="profile"
+    )
+    bio = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    avatar = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.user.email
+
+
 class Task(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
