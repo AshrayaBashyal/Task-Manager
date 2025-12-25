@@ -107,6 +107,9 @@ AUTHENTICATION_BACKENDS = [
     'tasks.auth_backends.EmailBackend',
 ]
 
+AUTH_USER_MODEL = "accounts.User"
+
+
 
 
 # Internationalization
