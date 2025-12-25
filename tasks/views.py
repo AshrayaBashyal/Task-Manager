@@ -5,7 +5,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 from .models import Task
-from .serializers import TaskSerializer, RegisterSerializer, LoginSerializer
+from .serializers import TaskSerializer, RegisterSerializer, LoginSerializer, ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -59,6 +59,18 @@ class LoginView(GenericAPIView):
             "user_id": user.id,
             "username": user.username
         })
+
+
+class MyProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
+
+
+
 
 # With Manual API Views
 

@@ -1,7 +1,6 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from .models import Task
-from django.contrib.auth import get_user_model
+from .models import Task, Profile
 
 User = get_user_model()
 
@@ -24,6 +23,22 @@ class TaskSerializer(serializers.ModelSerializer):
 #         password=validated_data['password']
 #         )
 #         return user
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ["id","bio", "avatar"]
+
+
+class UserSerializer(serializers.ModelSerializer):    #read-only profile
+    profile = ProfileSerializer()
+
+    class Meta:
+        model = User
+        fields = ["id", "email", "username", "profile"]
+
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
